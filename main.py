@@ -5,6 +5,7 @@ from kivymd.uix.textfield import MDTextField
 from kivy.lang import Builder
 from helpers import username_helper
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.list import OneLineListItem
 
 class DemoApp(MDApp):
 
@@ -13,6 +14,8 @@ class DemoApp(MDApp):
         self.theme_cls.primary_hue="A700"
         self.theme_cls.theme_style="Dark"
         screen = Screen()
+        item1 = OneLineListItem(text= 'Item 1')
+
         # username = MDTextField(text="Enter username",
         #                         pos_hint={'center_x' :0.5, 'center_y' : 0.5}, 
         #                         size_hint_x=None, width=300)
@@ -22,8 +25,9 @@ class DemoApp(MDApp):
 
         #icon_btn = MDFloatingActionButton(icon='facebook', pos_hint= {'center_x': 0.5, 'center_y': 0.5})
 
-        screen.add_widget(self.username)
-        screen.add_widget(btn_flat)
+        #screen.add_widget(self.username)
+        #screen.add_widget(btn_flat)
+        screen.add_widget(item1)
 
         return screen
     def show_data(self,obj):
