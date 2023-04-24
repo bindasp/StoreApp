@@ -5,7 +5,15 @@ from kivymd.uix.textfield import MDTextField
 from kivy.lang import Builder
 from helpers import username_helper
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.list import OneLineListItem
+from kivymd.uix.list import TwoLineListItem, MDList, ThreeLineIconListItem, IconLeftWidget, ThreeLineAvatarListItem, ImageLeftWidget
+from kivy.uix.scrollview import ScrollView
+
+list_helper = """
+
+
+
+
+"""
 
 class DemoApp(MDApp):
 
@@ -14,7 +22,20 @@ class DemoApp(MDApp):
         self.theme_cls.primary_hue="A700"
         self.theme_cls.theme_style="Dark"
         screen = Screen()
-        item1 = OneLineListItem(text= 'Item 1')
+
+        scroll = ScrollView()
+        list_view = MDList()
+        scroll.add_widget(list_view)
+
+        for i in range(20):
+            image = ImageLeftWidget(source="zdj.jpg")
+            items = ThreeLineAvatarListItem(text= 'Item ' + str(i), secondary_text='Hello world', tertiary_text = 'Third text')
+            
+            items.add_widget(image)
+            list_view.add_widget(items)
+            
+        
+        screen.add_widget(scroll)
 
         # username = MDTextField(text="Enter username",
         #                         pos_hint={'center_x' :0.5, 'center_y' : 0.5}, 
@@ -27,7 +48,7 @@ class DemoApp(MDApp):
 
         #screen.add_widget(self.username)
         #screen.add_widget(btn_flat)
-        screen.add_widget(item1)
+        
 
         return screen
     def show_data(self,obj):
