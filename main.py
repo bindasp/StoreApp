@@ -2,7 +2,58 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
 
+
+
 Window.size = (300,500)
+
+navigation_helper="""
+Screen:
+    MDNavigationLayout:
+        ScreenManager:
+            Screen:
+                BoxLayout:
+                    orientation: "vertical"
+                    MDTopAppBar:
+                        title: "Demo"
+                        left_action_items: [["menu", lambda x: nav_drawer.set_state('toggle')]]
+                        elevation: 3
+                    
+                    Widget:
+                        
+        MDNavigationDrawer:
+            id: nav_drawer
+            BoxLayout:
+                spacing: '8dp'
+                padding: '8dp'
+                orientation: 'vertical'
+
+                MDLabel:
+                    text:'Patryk'
+                    font_style: 'Subtitle1'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                MDLabel:
+                    text:'bindas.patryk@gmail.com'
+                    font_style: 'Caption'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                ScrollView:
+                    MDList:
+                        OneLineIconListItem:
+                            text: 'Profile'
+                            IconLeftWidget:
+                                icon: 'face-man-profile'
+                        OneLineIconListItem:
+                            text: 'Upload'
+                            IconLeftWidget:
+                                icon: 'file-upload'
+                        OneLineIconListItem:
+                            text: 'Logout'
+                            IconLeftWidget:
+                                icon: 'logout'
+
+"""
 
 screen_helper = '''
 Screen:
@@ -31,7 +82,7 @@ class DemoApp(MDApp):
     def build(self):
         self.theme_cls.primary_palette = 'Red'
 
-        return Builder.load_string(screen_helper)
+        return Builder.load_string(navigation_helper)
 
     def navigation_draw(self):
         print("Navigation")
