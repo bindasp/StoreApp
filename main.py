@@ -4,7 +4,6 @@ from kivy.core.window import Window
 from helpers import screen_helper
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty
-from kivymd.uix.label import MDLabel
 
 Window.size = (300,500)
 
@@ -22,7 +21,23 @@ class LoginScreen(Screen):
         print(username)
         print(password)
 
-class UploadScreen(Screen):
+class RegisterScreen(Screen):
+    forname = ObjectProperty(None)
+    lastname = ObjectProperty(None)
+    email= ObjectProperty(None)
+    password= ObjectProperty(None)
+    def register(self):
+        forname = self.forname.text
+        lastname = self.lastname.text
+        email = self.email.text
+        password = self.password.text
+
+        print(forname)
+        print(lastname)
+        print(email)
+        print(password)
+
+class AppScreen(Screen):
     pass
 
 sm = ScreenManager()
@@ -30,7 +45,8 @@ sm.add_widget(MenuScreen(name='menu'))
 
 sm.add_widget(LoginScreen(name='profile'))
 
-sm.add_widget(UploadScreen(name='upload'))
+sm.add_widget(RegisterScreen(name='register'))
+sm.add_widget(RegisterScreen(name='mainapp'))
 
 class DemoApp(MDApp):
 
