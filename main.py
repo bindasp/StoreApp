@@ -4,6 +4,7 @@ from kivy.core.window import Window
 from helpers import screen_helper
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty
+from test import mycursor, db
 
 Window.size = (300,500)
 
@@ -32,10 +33,8 @@ class RegisterScreen(Screen):
         email = self.email.text
         password = self.password.text
 
-        print(forname)
-        print(lastname)
-        print(email)
-        print(password)
+        mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo) VALUES (%s, %s, %s, %s)",  (forname, lastname, email, password))
+        db.commit()
 
 class AppScreen(Screen):
     pass
@@ -48,7 +47,7 @@ sm.add_widget(LoginScreen(name='profile'))
 sm.add_widget(RegisterScreen(name='register'))
 sm.add_widget(RegisterScreen(name='mainapp'))
 
-class DemoApp(MDApp):
+class MyApp(MDApp):
 
     def build(self):
         self.theme_cls.primary_palette="Green"
@@ -57,4 +56,4 @@ class DemoApp(MDApp):
         return Builder.load_string(screen_helper)
 
 
-DemoApp().run()
+MyApp().run()
