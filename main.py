@@ -6,35 +6,57 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty
 from database import mycursor, db
 
-Window.size = (300,500)
+Window.size = (800,800)
 
 class MenuScreen(Screen):
     pass
 
 class LoginScreen(Screen):
-    data = ObjectProperty(None)
-    text_field = ObjectProperty(None)
+    email = ObjectProperty(None)
+    password = ObjectProperty(None)
 
     def login(self):
-        username = self.data.text 
-        password = self.text_field.text
+        email = self.email.text
+        password = self.password.text
 
-        print(username)
-        print(password)
+        mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
+        user = mycursor.fetchone()
+        if user:
+            mycursor.execute("SELECT Haslo FROM uzytkownicy WHERE email = %s", (email,))
+            passwd = mycursor.fetchone()
+            if password == passwd[0]:
+                self.manager.current = 'mainapp'
+            else:
+                print("Błędne hasło")
+        else:
+            print("Użytkownik o podanym adresie email nie istnieje")
+        
 
 class RegisterScreen(Screen):
-    forname = ObjectProperty(None)
+    forename = ObjectProperty(None)
     lastname = ObjectProperty(None)
     email= ObjectProperty(None)
     password= ObjectProperty(None)
-    def register(self):
-        forname = self.forname.text
+
+    def validate(self):
+
+        forename = self.forename.text
         lastname = self.lastname.text
         email = self.email.text
         password = self.password.text
 
-        mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo) VALUES (%s, %s, %s, %s)",  (forname, lastname, email, password))
-        db.commit()
+        mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
+        user = mycursor.fetchone()
+        if user:
+            print("Użytkownik o podanym adresie email już istnieje.")
+            return False
+        else:
+            mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo) VALUES (%s, %s, %s, %s)",  (forename, lastname, email, password))
+            db.commit()
+            self.manager.current = 'mainapp'
+        
+
+
 
 class AppScreen(Screen):
     pass

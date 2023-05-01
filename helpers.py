@@ -20,20 +20,20 @@ ScreenManager:
         size_hint_x: 0.4
 
 <LoginScreen>:
-    data: data
-    text_field: text_field
+    email: email
+    password: password
     name: 'login'
 
     MDTextField:
-        id: data
-        hint_text: "Enter email"
+        id: email
+        hint_text: "Podaj email"
         pos_hint: {'center_x' :0.5, 'center_y' : 0.7}
         size_hint_x: 0.5
         max_text_length: 16
 
     MDTextField:
-        id: text_field
-        hint_text: "Enter password"
+        id: password
+        hint_text: "Podaj hasło"
         max_text_length: 16
         helper_text_mode: "on_focus"
         pos_hint: {'center_x' :0.5, 'center_y' : 0.5}
@@ -46,29 +46,29 @@ ScreenManager:
         theme_text_color: "Hint"
         on_release:
             self.icon = "eye" if self.icon == "eye-off" else "eye-off"
-            text_field.password = False if text_field.password is True else True
+            password.password = False if password.password is True else True
 
     MDRectangleFlatButton:
-        text:'Login'
+        text:'Zaloguj się'
         pos_hint: {'center_x': 0.5, 'center_y': 0.3}
         on_press: root.login()
 
     MDFlatButton:
-        text: 'Go back to menu'
+        text: 'Wróć do menu'
         pos_hint: {'center_x': 0.5, 'center_y': 0.2}   
         on_release: root.manager.current = 'menu'
 
 
 
 <RegisterScreen>:
-    forname: forname
+    forename: forename
     lastname: lastname
     email: email
     password: password
     name: 'register'
 
     MDTextField:
-        id: forname
+        id: forename
         hint_text: "Podaj imię"
         pos_hint: {'center_x' :0.5, 'center_y' : 0.8}
         size_hint_x: 0.5
@@ -106,10 +106,10 @@ ScreenManager:
             password.password = False if password.password is True else True
 
     MDRectangleFlatButton:
-        text:'Rejestracja'
+        text:'Zarejestruj się'
         pos_hint: {'center_x': 0.5, 'center_y': 0.3}
-        on_press: root.register()
-        on_press: root.manager.current = 'mainapp'
+        on_press: root.validate()
+
 
     MDFlatButton:
         text: 'Wróć do menu'

@@ -14,4 +14,3 @@ mycursor= db.cursor()
 ### Usunięcie bazy danych
 #mycursor.execute("DROP TABLE uzytkownicy")
 
-mycursor.execute("SELECT * FROM uzytkownicy")
