@@ -4,7 +4,7 @@ from kivy.core.window import Window
 from helpers import screen_helper
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty
-from test import mycursor, db
+from database import mycursor, db
 
 Window.size = (300,500)
 
