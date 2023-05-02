@@ -1,17 +1,20 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
-from helpers import screen_helper
+from helpers import KV
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty
 from database import mycursor, db
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.pickers import MDDatePicker
 
-Window.size = (800,800)
+Window.size = (1000,770)
 
 class MenuScreen(Screen):
     pass
 
 class LoginScreen(Screen):
+
     email = ObjectProperty(None)
     password = ObjectProperty(None)
 
@@ -55,10 +58,11 @@ class RegisterScreen(Screen):
             db.commit()
             self.manager.current = 'mainapp'
         
-
-
-
+    
 class AppScreen(Screen):
+    pass
+
+class StoreScreen(Screen):
     pass
 
 sm = ScreenManager()
@@ -67,7 +71,7 @@ sm.add_widget(MenuScreen(name='menu'))
 sm.add_widget(LoginScreen(name='profile'))
 
 sm.add_widget(RegisterScreen(name='register'))
-sm.add_widget(RegisterScreen(name='mainapp'))
+sm.add_widget(AppScreen(name='mainapp'))
 
 class MyApp(MDApp):
 
@@ -75,7 +79,22 @@ class MyApp(MDApp):
         self.theme_cls.primary_palette="Green"
         self.theme_cls.primary_hue="A700"
         self.theme_cls.theme_style="Dark"
-        return Builder.load_string(screen_helper)
+        
+        return Builder.load_string(KV)
 
+    def show_date_picker(self):
+        screen = self.root.get_screen('store')
+        date_field = screen.ids.date_field
+        date_field.focus = False
+        date_dialog = MDDatePicker(min_year = 2000, max_year = 2023)
+        date_dialog.bind(on_save=self.on_save_date, on_cancel= self.on_cancel)
+        date_dialog.open()
+    def on_cancel(self, instance, value):
+        pass
+    def on_save_date(self, instance, value, date_range):
+        screen = self.root.get_screen('store')
+        date_field = screen.ids.date_field
+        date_field.text = str(value)
+        
 
 MyApp().run()
