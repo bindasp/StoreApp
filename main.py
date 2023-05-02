@@ -7,6 +7,14 @@ from kivy.properties import ObjectProperty
 from database import mycursor, db
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.list import OneLineAvatarIconListItem
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.screen import MDScreen
+from kivy.uix.image import Image
+import cv2
+from kivy.clock import Clock
+from kivy.graphics.texture import Texture
+
 
 Window.size = (1000,770)
 
@@ -73,7 +81,19 @@ sm.add_widget(LoginScreen(name='profile'))
 sm.add_widget(RegisterScreen(name='register'))
 sm.add_widget(AppScreen(name='mainapp'))
 
+
+class ItemCategoryPopup(OneLineAvatarIconListItem):
+    def set_icon(self, instance_check):
+        instance_check.active = True
+        check_list = instance_check.get_widgets(instance_check.group)
+        for check in check_list:
+            if check != instance_check:
+                check.active= False
+
+
+
 class MyApp(MDApp):
+    dialog = None
 
     def build(self):
         self.theme_cls.primary_palette="Green"
@@ -96,5 +116,35 @@ class MyApp(MDApp):
         date_field = screen.ids.date_field
         date_field.text = str(value)
         
+    #wyskakujące okienko
+    def show_caregory_dialog(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title = 'Wybierz kategorię',
+                type='confirmation',
+                items = [ItemCategoryPopup(text='Bluzy'),
+                        ItemCategoryPopup(text='Koszulki'),
+                        ItemCategoryPopup(text='Spodnie'),
+                        ItemCategoryPopup(text='Kurtki')],
+                        buttons= [
+                            MDFlatButton(
+                            text='COFNIJ',
+                            theme_text_color= 'Custom',
+                            text_color=self.theme_cls.primary_color, 
+                            on_release=self.cancel_dialog
+                                        ),
+                            MDFlatButton(
+                            text='OK',
+                            theme_text_color= 'Custom',
+                            text_color=self.theme_cls.primary_color, )
+
+
+
+                        ])
+            
+        self.dialog.open()
+
+    def cancel_dialog(self, instance):
+        self.dialog.dismiss()
 
 MyApp().run()

@@ -6,6 +6,7 @@ ScreenManager:
     AppScreen:
     StoreScreen:
 
+
 <MenuScreen>:
     name: 'menu'
     MDRectangleFlatButton:
@@ -206,7 +207,39 @@ ScreenManager:
                     size_hint: .9, None
                     pos_hint: {'center_x': .5}
                     on_focus: app.show_date_picker()
-        
+                    
+                #Kategorie produktów
+                MDBoxLayout:
+                    size_hint: 0.9, None
+                    height: 40
+                    pos_hint: {'center_x': 0.5}
+                    MDLabel:
+                        id: item_category_label
+                        text: "Brak kategorii"
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                    MDRaisedButton:
+                        id: item_category_button
+                        text: 'Wybierz kategorię'
+                        size_hint: 0.7, None
+                        on_release: app.show_caregory_dialog()
+            # Zdjęcie
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint: 0.4, 1
+                spacing: 10
+                pos_hint: {'center_y': 0.8}
+
+                FitImage:
+                    id: product_photo
+                    size_hint: 0.5, None
+                    paddding: 5.5
+                    height: '130dp'
+                    pos_hint: {'center_x': 0.5, 'center_y': 1}
+                    source: 'images/image.jpg'
+
+                    
+
         Widget: 
 
 '''
