@@ -48,6 +48,10 @@ class RegisterScreen(Screen):
     lastname = ObjectProperty(None)
     email= ObjectProperty(None)
     password= ObjectProperty(None)
+    phone_number= ObjectProperty(None)
+    address = ObjectProperty(None)
+    birth = ObjectProperty(None)
+    gender = ObjectProperty(None)
 
     def validate(self):
 
@@ -55,6 +59,10 @@ class RegisterScreen(Screen):
         lastname = self.lastname.text
         email = self.email.text
         password = self.password.text
+        phone_number = self.phone_number.text 
+        address = self.address.text
+        birth = self.birth.text
+        gender = self.gender.text
 
         mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
         user = mycursor.fetchone()
@@ -62,7 +70,7 @@ class RegisterScreen(Screen):
             print("Użytkownik o podanym adresie email już istnieje.")
             return False
         else:
-            mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo) VALUES (%s, %s, %s, %s)",  (forename, lastname, email, password))
+            mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo, NumerTelefonu, Adres, DataUrodzenia, Plec) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  (forename, lastname, email, password, phone_number, address, birth, gender))
             db.commit()
             self.manager.current = 'mainapp'
         
@@ -109,6 +117,15 @@ class MyApp(MDApp):
         date_dialog = MDDatePicker(min_year = 2000, max_year = 2023)
         date_dialog.bind(on_save=self.on_save_date, on_cancel= self.on_cancel)
         date_dialog.open()
+    
+    def show_date_picker_register(self):
+        screen = self.root.get_screen('register')
+        date_field = screen.ids.birth
+        date_field.focus = False
+        date_dialog = MDDatePicker(min_year = 2000, max_year = 2023)
+        date_dialog.bind(on_save=self.on_save_date_register, on_cancel= self.on_cancel)
+        date_dialog.open()
+
     def on_cancel(self, instance, value):
         pass
     def on_save_date(self, instance, value, date_range):
@@ -116,6 +133,11 @@ class MyApp(MDApp):
         date_field = screen.ids.date_field
         date_field.text = str(value)
         
+    def on_save_date_register(self, instance, value, date_range):
+        screen = self.root.get_screen('register')
+        date_field = screen.ids.birth
+        date_field.text = str(value)
+
     #wyskakujące okienko
     def show_caregory_dialog(self):
         if not self.dialog:
@@ -144,7 +166,41 @@ class MyApp(MDApp):
             
         self.dialog.open()
 
+    def show_gender_dialog(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title = 'Wybierz płeć',
+                type='confirmation',
+                items = [ItemCategoryPopup(text='Mężczyzna'),
+                        ItemCategoryPopup(text='Kobieta'),
+                        ItemCategoryPopup(text='Inne'),
+                        ],
+                        buttons= [
+                            MDFlatButton(
+                            text='COFNIJ',
+                            theme_text_color= 'Custom',
+                            text_color=self.theme_cls.primary_color, 
+                            on_release=self.cancel_dialog
+                                        ),
+                            MDFlatButton(
+                            text='OK',
+                            theme_text_color= 'Custom',
+                            text_color=self.theme_cls.primary_color,
+                            on_release= self.set_gender )
+
+
+
+                        ])
+            
+        self.dialog.open()
+
     def cancel_dialog(self, instance):
         self.dialog.dismiss()
+
+    def set_gender(self, gender):
+        screen = self.root.get_screen('register')
+        date_field = screen.ids.gender
+        date_field.text = 'Kobieta'
+
 
 MyApp().run()
