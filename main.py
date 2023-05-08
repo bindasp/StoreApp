@@ -1,19 +1,13 @@
-from kivymd.app import MDApp
-from kivy.lang import Builder
 from kivy.core.window import Window
-from helpers import KV
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.properties import ObjectProperty
-from database import mycursor, db
+from Classes.Login import LoginScreen
+from Classes.Register import RegisterScreen
+from kivy.lang import Builder
+from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.list import OneLineAvatarIconListItem
 from kivymd.uix.button import MDFlatButton
-from kivymd.uix.screen import MDScreen
-from kivy.uix.image import Image
-import cv2
-from kivy.clock import Clock
-from kivy.graphics.texture import Texture
+from Classes.ItemPopup import ItemCategoryPopup
 
 
 Window.size = (1000,770)
@@ -21,94 +15,36 @@ Window.size = (1000,770)
 class MenuScreen(Screen):
     pass
 
-class LoginScreen(Screen):
-
-    email = ObjectProperty(None)
-    password = ObjectProperty(None)
-
-    def login(self):
-        email = self.email.text
-        password = self.password.text
-
-        mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
-        user = mycursor.fetchone()
-        if user:
-            mycursor.execute("SELECT Haslo FROM uzytkownicy WHERE email = %s", (email,))
-            passwd = mycursor.fetchone()
-            if password == passwd[0]:
-                self.manager.current = 'mainapp'
-            else:
-                print("Błędne hasło")
-        else:
-            print("Użytkownik o podanym adresie email nie istnieje")
-        
-
-class RegisterScreen(Screen):
-    forename = ObjectProperty(None)
-    lastname = ObjectProperty(None)
-    email= ObjectProperty(None)
-    password= ObjectProperty(None)
-    phone_number= ObjectProperty(None)
-    address = ObjectProperty(None)
-    birth = ObjectProperty(None)
-    gender = ObjectProperty(None)
-
-    def validate(self):
-
-        forename = self.forename.text
-        lastname = self.lastname.text
-        email = self.email.text
-        password = self.password.text
-        phone_number = self.phone_number.text 
-        address = self.address.text
-        birth = self.birth.text
-        gender = self.gender.text
-
-        mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
-        user = mycursor.fetchone()
-        if user:
-            print("Użytkownik o podanym adresie email już istnieje.")
-            return False
-        else:
-            mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo, NumerTelefonu, Adres, DataUrodzenia, Plec) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  (forename, lastname, email, password, phone_number, address, birth, gender))
-            db.commit()
-            self.manager.current = 'mainapp'
-        
-    
 class AppScreen(Screen):
     pass
 
 class StoreScreen(Screen):
     pass
 
-sm = ScreenManager()
-sm.add_widget(MenuScreen(name='menu'))
-
-sm.add_widget(LoginScreen(name='profile'))
-
-sm.add_widget(RegisterScreen(name='register'))
-sm.add_widget(AppScreen(name='mainapp'))
-
-
-class ItemCategoryPopup(OneLineAvatarIconListItem):
-    def set_icon(self, instance_check):
-        instance_check.active = True
-        check_list = instance_check.get_widgets(instance_check.group)
-        for check in check_list:
-            if check != instance_check:
-                check.active= False
-
+Builder.load_file('Layout/menu.kv')
+Builder.load_file('Layout/login.kv')
+Builder.load_file('Layout/register.kv')
+Builder.load_file('Layout/app.kv')
+Builder.load_file('Layout/store.kv')
 
 
 class MyApp(MDApp):
     dialog = None
 
     def build(self):
-        self.theme_cls.primary_palette="Green"
-        self.theme_cls.primary_hue="A700"
-        self.theme_cls.theme_style="Dark"
         
-        return Builder.load_string(KV)
+        sm = ScreenManager()
+        sm.add_widget(MenuScreen(name = 'menu'))
+        sm.add_widget(LoginScreen(name = 'login'))
+        sm.add_widget(RegisterScreen(name='register'))
+        sm.add_widget(AppScreen(name = 'app'))
+        sm.add_widget(StoreScreen(name = 'store'))
+
+        self.theme_cls.primary_palette="Blue"
+        self.theme_cls.primary_hue="A700"
+        self.theme_cls.theme_style="Light"
+        
+        return sm
 
     def show_date_picker(self):
         screen = self.root.get_screen('store')
@@ -158,13 +94,20 @@ class MyApp(MDApp):
                             MDFlatButton(
                             text='OK',
                             theme_text_color= 'Custom',
-                            text_color=self.theme_cls.primary_color, )
-
-
+                            text_color=self.theme_cls.primary_color,
+                            on_release = self.get_category
+                            )
 
                         ])
             
         self.dialog.open()
+
+    def get_category(self, instance):
+        screen = self.root.get_screen('store')
+        screen.ids.item_category_label.text = self.dialog.items.text
+
+        self.dialog.dismiss()
+        self.dialog = None
 
     def show_gender_dialog(self):
         if not self.dialog:
@@ -201,6 +144,7 @@ class MyApp(MDApp):
         screen = self.root.get_screen('register')
         date_field = screen.ids.gender
         date_field.text = 'Kobieta'
+
 
 
 MyApp().run()
