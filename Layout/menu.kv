@@ -1,0 +1,13 @@
+<MenuScreen>:
+    name: 'menu'
+    MDRectangleFlatButton:
+        text: 'Zaloguj się'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+        on_press: root.manager.current = 'login'
+        size_hint_x: 0.4
+
+    MDRectangleFlatButton:
+        text: 'Zarejestruj się'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+        on_press: root.manager.current = 'register'
+        size_hint_x: 0.4

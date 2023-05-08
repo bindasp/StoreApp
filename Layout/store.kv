@@ -1,0 +1,129 @@
+<StoreScreen>:
+    name:'store'
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: 5
+        MDTopAppBar:
+            title: 'Magazyn'
+            size_hint: 1.0, 0.2
+            
+        
+        MDBoxLayout:
+            orientation: 'vertical'
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint: 1.0, None
+                spacing: 10 
+
+                MDTextField:
+                    id: item_name
+                    hint_text: 'Podaj nazwę produktu'
+                    mode: 'rectangle'
+                    size_hint: .9, None
+                    pos_hint: {'center_x': .5}
+
+                MDTextField:
+                    id: price_field
+                    hint_text: 'Podaj cenę'
+                    mode: 'rectangle'
+                    size_hint: .9, None
+                    pos_hint: {'center_x': .5}
+
+                MDTextField:
+                    id: date_field
+                    hint_text: 'Data'
+                    mode: 'rectangle'
+                    size_hint: .9, None
+                    pos_hint: {'center_x': .5}
+                    on_focus: app.show_date_picker()
+                    
+                #Kategorie produktów
+                MDBoxLayout:
+                    size_hint: 0.9, None
+                    height: 40
+                    pos_hint: {'center_x': 0.5}
+                    MDLabel:
+                        id: item_category_label
+                        text: "Brak kategorii"
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                    MDRaisedButton:
+                        id: item_category_button
+                        text: 'Wybierz kategorię'
+                        size_hint: 0.7, None
+                        on_release: app.show_caregory_dialog()
+
+                        
+
+        MDBoxLayout:
+            spacing: '5dp'
+            size_hint: 0.9, None
+            height: 40
+            pos_hint: {'center_x': 0.5}
+
+            MDRaisedButton:
+                id: insert_button
+                text: 'Dodaj produkt'
+                size_hint: 0.25, None
+                
+            MDRaisedButton:
+                id: update_button
+                text: 'Zaktualizuj produkt'
+                size_hint: 0.25, None
+
+            MDRaisedButton:
+                id: delete_button
+                text: 'Usuń produkt'
+                size_hint: 0.25, None
+
+            MDRaisedButton:
+                id: cancel_button
+                text: 'Anuluj'
+                size_hint: 0.25, None
+        #Baza danych
+        MDBoxLayout:
+            id: table
+            pos_hint: {'center_x': 0.5}
+            size_hint_x: 0.95
+
+        #Wyszukiwarka
+        MDBoxLayout:
+            pos_hint: {'center_x': 0.5}
+            size_hint: 0.5, None
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint: 0.2, None
+                height: 50
+                pos_hint: {'center_y': 0.5,}
+
+                MDBoxLayout:
+                    MDCheckbox:
+                        id: id_check
+                        size_hint: None, None
+                        size: '38dp', '38dp'
+                        pos_hint: {'center_y': 0.5}
+
+                    MDLabel:
+                        text: 'id'
+                        pos_hint: {'center_y': 0.5}
+
+                MDBoxLayout:
+                    MDCheckbox:
+                        id: item_check
+                        size_hint: None, None
+                        size: '38dp', '38dp'
+                        pos_hint: {'center_y': 0.5}
+                        active: True
+
+                    MDLabel:
+                        text: 'Produkt'
+                        pos_hint: {'center_y': 0.5}
+
+            MDTextField:
+                id: search
+                hint_text: 'Wyszukaj'
+                mode: 'rectangle'
+                size_hint_x: 0.7
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                

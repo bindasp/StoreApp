@@ -1,0 +1,38 @@
+<LoginScreen>:
+    email: email
+    password: password
+    name: 'login'
+
+    MDTextField:
+        id: email
+        hint_text: "Podaj email"
+        pos_hint: {'center_x' :0.5, 'center_y' : 0.7}
+        size_hint_x: 0.5
+        max_text_length: 32
+
+    MDTextField:
+        id: password
+        hint_text: "Podaj hasło"
+        max_text_length: 16
+        helper_text_mode: "on_focus"
+        pos_hint: {'center_x' :0.5, 'center_y' : 0.5}
+        size_hint_x: 0.5
+        password:True
+
+    MDIconButton:
+        icon: "eye-off"
+        pos_hint: {"center_x": 0.75, "center_y": 0.5}
+        theme_text_color: "Hint"
+        on_release:
+            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+            password.password = False if password.password is True else True
+
+    MDRectangleFlatButton:
+        text:'Zaloguj się'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+        on_press: root.login()
+
+    MDFlatButton:
+        text: 'Wróć do menu'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.2}   
+        on_release: root.manager.current = 'menu'

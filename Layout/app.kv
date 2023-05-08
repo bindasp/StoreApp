@@ -1,0 +1,47 @@
+<AppScreen>:
+    name: 'app'
+    MDNavigationLayout:
+        ScreenManager:
+            Screen:
+                BoxLayout:
+                    orientation: "vertical"
+                    MDTopAppBar:
+                        title: "Pasek nawigacji"
+                        left_action_items: [["menu", lambda x: nav_drawer.set_state('toggle')]]
+                        elevation: 3
+                    
+                    Widget:
+                        
+        MDNavigationDrawer:
+            id: nav_drawer
+            BoxLayout:
+                spacing: '8dp'
+                padding: '8dp'
+                orientation: 'vertical'
+                MDLabel:
+                    id: user_name
+                    text: 'test'
+                    font_style: 'Subtitle1'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                MDLabel:
+                    text:'bindas.patryk@gmail.com'
+                    font_style: 'Caption'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                ScrollView:
+                    MDList:
+                        OneLineIconListItem:
+                            text: 'Profil'
+                            
+                            IconLeftWidget:
+                                icon: 'face-man-profile'
+                        OneLineIconListItem:
+                            text: 'Magazyn'
+                            on_release: root.manager.current = 'store'
+                            IconLeftWidget:
+                                icon: 'file-upload'
+                        OneLineIconListItem:
+                            text: 'Wyloguj się'
+                            IconLeftWidget:
+                                icon: 'logout'
