@@ -8,9 +8,9 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.button import MDFlatButton
 from Classes.ItemPopup import ItemCategoryPopup
+from Classes.Store import StoreScreen
 
-
-Window.size = (1000,770)
+Window.size = (1000,800)
 
 class MenuScreen(Screen):
     pass
@@ -18,8 +18,6 @@ class MenuScreen(Screen):
 class AppScreen(Screen):
     pass
 
-class StoreScreen(Screen):
-    pass
 
 Builder.load_file('Layout/menu.kv')
 Builder.load_file('Layout/login.kv')
@@ -49,6 +47,7 @@ class MyApp(MDApp):
 
     #wyskakujące okienko
     def show_caregory_dialog(self):
+
         if not self.dialog:
             self.dialog = MDDialog(
                 title = 'Wybierz kategorię',
@@ -75,12 +74,15 @@ class MyApp(MDApp):
             
         self.dialog.open()
 
-    def get_category(self, instance):
+    def get_category(self, inst):
         screen = self.root.get_screen('store')
-        screen.ids.item_category_label.text = self.dialog.items.text
+        for item in self.dialog.items:
+            if item.ids.check.active == True:
+                screen.ids.item_category_label.text = item.text
 
         self.dialog.dismiss()
         self.dialog = None
+        
 
     def cancel_dialog(self, instance):
         self.dialog.dismiss()

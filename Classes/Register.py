@@ -48,12 +48,14 @@ class RegisterScreen(Screen):
         date_dialog.bind(on_save=self.on_save_date_register, on_cancel= self.on_cancel)
         date_dialog.open()
 
+
     def on_cancel(self, instance, value):
         pass
 
     def on_save_date_register(self, instance, value, date_range):
         date_field = self.ids.birth
         date_field.text = str(value)
+        self.on_cancel
 
 
     def show_gender_dialog(self):
@@ -84,5 +86,10 @@ class RegisterScreen(Screen):
         self.dialog.dismiss()
 
     def set_gender(self, gender):
-        date_field = self.ids.gender
-        date_field.text = 'Kobieta'
+        screen = self.ids.gender
+        for item in self.dialog.items:
+            if item.ids.check.active == True:
+                screen.text = item.text
+
+        self.dialog.dismiss()
+        self.dialog = None
