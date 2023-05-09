@@ -22,4 +22,4 @@ class LoginScreen(Screen):
                 print("Błędne hasło")
         else:
             print("Użytkownik o podanym adresie email nie istnieje")
-        
+

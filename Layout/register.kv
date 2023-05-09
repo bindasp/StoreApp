@@ -83,7 +83,7 @@
                 mode: 'rectangle'
                 size_hint: .9, None
                 pos_hint: {'center_x': .5}
-                on_focus: app.show_date_picker_register()
+                on_focus: app.root.current_screen.show_date_picker_register()
 
             MDTextField:
                 id: gender
@@ -91,7 +91,7 @@
                 mode: 'rectangle'
                 size_hint: .9, None
                 pos_hint: {'center_x': .5}
-                on_focus: app.show_gender_dialog()
+                on_focus: app.root.current_screen.show_gender_dialog()
             MDFlatButton:
                 pos_hint: {'center_x': 5.0}
     MDBoxLayout:

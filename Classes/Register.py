@@ -1,8 +1,16 @@
 from kivy.properties import ObjectProperty
 from Classes.database import mycursor, db
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.dialog import MDDialog
+from Classes.ItemPopup import ItemCategoryPopup
+from kivymd.uix.button import MDFlatButton
 
 class RegisterScreen(Screen):
+    def __init__(self, **kwargs):
+        super(RegisterScreen, self).__init__(**kwargs)
+        self.dialog = None
+
     forename = ObjectProperty(None)
     lastname = ObjectProperty(None)
     email= ObjectProperty(None)
@@ -31,6 +39,50 @@ class RegisterScreen(Screen):
         else:
             mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo, NumerTelefonu, Adres, DataUrodzenia, Plec) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  (forename, lastname, email, password, phone_number, address, birth, gender))
             db.commit()
-            self.manager.current = 'mainapp'
+            self.manager.current = 'app'
         
-    
+    def show_date_picker_register(self):
+        date_field = self.ids.birth
+        date_field.focus = False
+        date_dialog = MDDatePicker(min_year = 2000, max_year = 2023)
+        date_dialog.bind(on_save=self.on_save_date_register, on_cancel= self.on_cancel)
+        date_dialog.open()
+
+    def on_cancel(self, instance, value):
+        pass
+
+    def on_save_date_register(self, instance, value, date_range):
+        date_field = self.ids.birth
+        date_field.text = str(value)
+
+
+    def show_gender_dialog(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title = 'Wybierz płeć',
+                type='confirmation',
+                items = [ItemCategoryPopup(text='Mężczyzna'),
+                        ItemCategoryPopup(text='Kobieta'),
+                        ItemCategoryPopup(text='Inne'),
+                        ],
+                        buttons= [
+                            MDFlatButton(
+                            text='COFNIJ',
+                            on_release=self.cancel_dialog
+                                        ),
+                            MDFlatButton(
+                            text='OK',
+                            on_release= self.set_gender )
+
+
+
+                        ])
+            
+        self.dialog.open()
+
+    def cancel_dialog(self, instance):
+        self.dialog.dismiss()
+
+    def set_gender(self, gender):
+        date_field = self.ids.gender
+        date_field.text = 'Kobieta'
