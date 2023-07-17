@@ -1,5 +1,5 @@
 from kivy.properties import ObjectProperty
-from Classes.database import mycursor, db
+from Classes.database import Database
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.dialog import MDDialog
@@ -31,14 +31,14 @@ class RegisterScreen(Screen):
         birth = self.birth.text
         gender = self.gender.text
 
-        mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
-        user = mycursor.fetchone()
+        Database.mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
+        user = Database.mycursor.fetchone()
         if user:
             print("Użytkownik o podanym adresie email już istnieje.")
             return False
         else:
-            mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo, NumerTelefonu, Adres, DataUrodzenia, Plec) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  (forename, lastname, email, password, phone_number, address, birth, gender))
-            db.commit()
+            Database.mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo, NumerTelefonu, Adres, DataUrodzenia, Plec) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  (forename, lastname, email, password, phone_number, address, birth, gender))
+            Database.db.commit()
             self.manager.current = 'app'
         
     def show_date_picker_register(self):

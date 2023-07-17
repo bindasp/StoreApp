@@ -10,6 +10,8 @@ from kivymd.uix.button import MDFlatButton
 from Classes.ItemPopup import ItemCategoryPopup
 from Classes.Store import StoreScreen
 
+from Classes.database import Database
+
 Window.size = (1000,800)
 
 class MenuScreen(Screen):

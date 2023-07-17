@@ -1,5 +1,5 @@
 from kivy.properties import ObjectProperty
-from Classes.database import mycursor
+from Classes.database import Database
 from kivy.uix.screenmanager import Screen
 
 class LoginScreen(Screen):
@@ -11,11 +11,11 @@ class LoginScreen(Screen):
         email = self.email.text
         password = self.password.text
 
-        mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
-        user = mycursor.fetchone()
+        Database.mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
+        user = Database.mycursor.fetchone()
         if user:
-            mycursor.execute("SELECT Haslo FROM uzytkownicy WHERE email = %s", (email,))
-            passwd = mycursor.fetchone()
+            Database.mycursor.execute("SELECT Haslo FROM uzytkownicy WHERE email = %s", (email,))
+            passwd = Database.mycursor.fetchone()
             if password == passwd[0]:
                 self.manager.current = 'app'
             else:
