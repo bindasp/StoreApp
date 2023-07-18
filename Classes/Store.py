@@ -9,6 +9,8 @@ class StoreScreen(Screen):
         super(StoreScreen, self).__init__(**kwargs)
         self.dialog = None
 
+        self.baza = Database()
+
         self.create_datatable()
         self.reload_data_table()
         
@@ -19,9 +21,10 @@ class StoreScreen(Screen):
         category = self.ids['item_category_label'].text
         track = 0 if self.ids['id_check'].active else 1
 
-        Database.mycursor.execute("INSERT INTO produkty (opis, cena, kategoria, track) VALUES (%s,%s,%s,%s)", (description, price, category, track))
-        Database.db.commit()
+        self.baza.create_entry(description, price, date , category, track)
         self.reload_data_table()
+
+        self.clear_text()
 
     def create_datatable(self):
         self.data_table= MDDataTable(
@@ -32,6 +35,7 @@ class StoreScreen(Screen):
                 ("Id", dp(20)), 
                 ("Description", dp(30)), 
                 ("Price", dp(25)), 
+                ("Date", dp(25)), 
                 ("Category", dp(25)),
                 ("Track", dp(25)),
             ],
@@ -43,16 +47,22 @@ class StoreScreen(Screen):
 
     def reload_data_table(self):
         self.remove_datatable()
-        self.create_datatable()
-        
-        # Wykonaj zapytanie SQL
-        Database.mycursor.execute("SELECT id, opis, cena, kategoria, track FROM produkty")
-        
-        # Pobierz wszystkie wiersze
-        result = Database.mycursor.fetchall()
-        
-        # Przetwórz wynik i przypisz do row_data
-        self.data_table.row_data = [list(row) for row in result]
-        Database.db.commit()
+        data = self.baza.get_product()
+        if data is not None:
+            self.create_datatable()
+            self.data_table.row_data = data
+        else:
+            # Handle the case when data is None, e.g., display an error message or set an empty row_data
+            self.create_datatable()
+            self.data_table.row_data = []
+
+
+
     def remove_datatable(self):
         self.ids["table"].remove_widget(self.data_table)
+
+    def clear_text(self):
+        self.ids["item_name"].text = ''
+        self.ids["price_field"].text = ''
+        self.ids["date_field"].text = ''
+        self.ids["item_category_label"].text = 'Brak kategorii'

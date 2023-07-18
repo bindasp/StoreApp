@@ -1,5 +1,5 @@
 from kivy.properties import ObjectProperty
-from Classes.database import Database
+from Classes.database import Users
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.dialog import MDDialog
@@ -7,10 +7,6 @@ from Classes.ItemPopup import ItemCategoryPopup
 from kivymd.uix.button import MDFlatButton
 
 class RegisterScreen(Screen):
-    def __init__(self, **kwargs):
-        super(RegisterScreen, self).__init__(**kwargs)
-        self.dialog = None
-
     forename = ObjectProperty(None)
     lastname = ObjectProperty(None)
     email= ObjectProperty(None)
@@ -19,7 +15,12 @@ class RegisterScreen(Screen):
     address = ObjectProperty(None)
     birth = ObjectProperty(None)
     gender = ObjectProperty(None)
+    
+    def __init__(self, **kwargs):
+        super(RegisterScreen, self).__init__(**kwargs)
+        self.dialog = None
 
+        self.uzytkownicy = Users()
     def validate(self):
 
         forename = self.forename.text
@@ -31,14 +32,13 @@ class RegisterScreen(Screen):
         birth = self.birth.text
         gender = self.gender.text
 
-        Database.mycursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
-        user = Database.mycursor.fetchone()
+        self.uzytkownicy.cursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
+        user = self.uzytkownicy.cursor.fetchone()
         if user:
             print("Użytkownik o podanym adresie email już istnieje.")
             return False
         else:
-            Database.mycursor.execute("INSERT INTO uzytkownicy (Imie, Nazwisko, Email, Haslo, NumerTelefonu, Adres, DataUrodzenia, Plec) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  (forename, lastname, email, password, phone_number, address, birth, gender))
-            Database.db.commit()
+            self.uzytkownicy.add_user(forename, lastname, email, password, phone_number, address, birth, gender)
             self.manager.current = 'app'
         
     def show_date_picker_register(self):
