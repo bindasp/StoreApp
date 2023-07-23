@@ -17,11 +17,11 @@ class StoreScreen(Screen):
     def insert_data(self):
         description = self.ids['item_name'].text
         price = self.ids['price_field'].text
+        formatted_price = float(price)
         date = self.ids['date_field'].text
         category = self.ids['item_category_label'].text
-        track = 0 if self.ids['id_check'].active else 1
 
-        self.baza.create_entry(description, price, date , category, track)
+        self.baza.create_entry(description, formatted_price , date , category)
         self.reload_data_table()
 
         self.clear_text()
@@ -29,20 +29,20 @@ class StoreScreen(Screen):
     def create_datatable(self):
         self.data_table= MDDataTable(
             size_hint=(1, 1),
+            elevation= 2,
             use_pagination=True,
             check=True, 
             column_data=[
                 ("Id", dp(20)), 
-                ("Description", dp(30)), 
-                ("Price", dp(25)), 
-                ("Date", dp(25)), 
-                ("Category", dp(25)),
-                ("Track", dp(25)),
+                ("Nazwa produktu", dp(45)), 
+                ("Cena (zł)", dp(25)), 
+                ("Data dostawy", dp(25)), 
+                ("Rodzaj produktu", dp(50)),
             ],
             row_data = [],
 
         )
-
+        self.data_table.bind(on_check_press=self.on_check_press)
         self.ids['table'].add_widget(self.data_table)
 
     def reload_data_table(self):
@@ -52,7 +52,7 @@ class StoreScreen(Screen):
             self.create_datatable()
             self.data_table.row_data = data
         else:
-            # Handle the case when data is None, e.g., display an error message or set an empty row_data
+
             self.create_datatable()
             self.data_table.row_data = []
 
@@ -66,3 +66,27 @@ class StoreScreen(Screen):
         self.ids["price_field"].text = ''
         self.ids["date_field"].text = ''
         self.ids["item_category_label"].text = 'Brak kategorii'
+
+    def update(self):
+        checked_rows = self.data_table.get_row_checks()
+        if not checked_rows:
+            print("Nie wybrałeś żadnego produktu.")
+            return
+        id = checked_rows[0][0]
+        
+        description = self.ids['item_name'].text
+        price = self.ids['price_field'].text
+        date = self.ids['date_field'].text
+        category = self.ids['item_category_label'].text
+
+        self.baza.update_product(id, description, price, date, category)
+        self.reload_data_table()
+        self.clear_text()
+
+
+    def on_check_press(self, instance_table, current_row):
+        self.ids["item_name"].text = current_row[1]
+        self.ids["price_field"].text = current_row[2]
+        self.ids["date_field"].text = current_row[3]
+        self.ids["item_category_label"].text = current_row[4]
+        print(current_row[0])

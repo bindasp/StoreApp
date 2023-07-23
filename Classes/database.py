@@ -10,16 +10,21 @@ class Database:
         self.cursor = self.db.cursor()
         self.create_products_table
     def create_products_table(self):
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS produkty (ID int PRIMARY KEY AUTO_INCREMENT, opis varchar(50), cena FLOAT, data DATE ,kategoria varchar(50), track BOOLEAN NOT NULL CHECK (track IN(0,1) ) )")
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS produkty (ID int PRIMARY KEY AUTO_INCREMENT, opis varchar(50), cena FLOAT, data DATE ,kategoria varchar(50))")
         self.db.commit()
 
-    def create_entry(self, description, price, date , category, track):
-        self.cursor.execute("INSERT INTO produkty (opis, cena, data, kategoria, track) VALUES (%s,%s,%s,%s,%s)", (description, price,date, category, track))
+    def create_entry(self, description, price, date , category):
+        self.cursor.execute("INSERT INTO produkty (opis, cena, data, kategoria) VALUES (%s,%s,%s,%s)", (description, price,date, category))
         self.db.commit()
     def get_product(self):
-        self.cursor.execute ("SELECT id, opis, cena, data, kategoria, track FROM produkty")
+        self.cursor.execute ("SELECT id, opis, cena, data, kategoria FROM produkty")
         all_products = self.cursor.fetchall()
         return all_products
+    
+    def update_product(self, id,  description, price, date , category ):
+        self.cursor.execute("UPDATE produkty SET opis=%s, cena=%s, data=%s, kategoria=%s WHERE id =%s", (description, price, date, category,  id))
+        self.db.commit()
+
     
 class Users:
     def __init__(self):

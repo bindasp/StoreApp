@@ -54,10 +54,15 @@ class MyApp(MDApp):
             self.dialog = MDDialog(
                 title = 'Wybierz kategorię',
                 type='confirmation',
-                items = [ItemCategoryPopup(text='Bluzy'),
-                        ItemCategoryPopup(text='Koszulki'),
-                        ItemCategoryPopup(text='Spodnie'),
-                        ItemCategoryPopup(text='Kurtki')],
+                items = [ItemCategoryPopup(text='karta graficzna'),
+                        ItemCategoryPopup(text='procesor'),
+                        ItemCategoryPopup(text='chłodzenie'),
+                        ItemCategoryPopup(text='pamięć RAM'),
+                        ItemCategoryPopup(text='płyta główna'),
+                        ItemCategoryPopup(text='zasilacz'),
+                        ItemCategoryPopup(text='obudowa'),
+                        ItemCategoryPopup(text='dysk SSD'),
+                        ItemCategoryPopup(text='dysk HDD'),],
                         buttons= [
                             MDFlatButton(
                             text='COFNIJ',
