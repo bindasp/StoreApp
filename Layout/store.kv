@@ -86,11 +86,13 @@
                             id: delete_button
                             text: 'Usuń produkt'
                             size_hint: 0.25, None
+                            on_release: app.root.current_screen.delete()
 
                         MDRaisedButton:
                             id: cancel_button
                             text: 'Anuluj'
                             size_hint: 0.25, None
+                            on_release: app.root.current_screen.cancel()
                     #Baza danych
                     MDBoxLayout:
                         id: table

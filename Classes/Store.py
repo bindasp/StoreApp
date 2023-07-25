@@ -84,9 +84,46 @@ class StoreScreen(Screen):
         self.clear_text()
 
 
+    def delete(self):
+        rows = [i[0] for i in self.data_table.get_row_checks()]
+        if rows != []:
+            for id in rows:
+                self.baza.delete_product(id)
+            self.reload_data_table()
+            self.clear_text()
+        else:
+            print("Nie wybrano produktu")
+
     def on_check_press(self, instance_table, current_row):
         self.ids["item_name"].text = current_row[1]
         self.ids["price_field"].text = current_row[2]
         self.ids["date_field"].text = current_row[3]
         self.ids["item_category_label"].text = current_row[4]
         print(current_row[0])
+
+    def cancel(self):
+        self.reload_data_table()
+        self.clear_text()
+
+    def refresh_update(self):
+        rows = self.data_table.get_row_checks()
+        if rows != []:
+            if len(rows) == 1:
+                self.ids['update_button'].disabled = False
+                self.ids['delete_button'].disabled = False
+            elif len(rows) > 1:
+                self.ids['update_button'].disabled = True
+                self.ids['delete_button'].disabled = False
+            else:
+                self.ids['update_button'].disabled = True
+                self.ids['delete_button'].disabled = True
+        else:
+            self.ids['update_button'].disabled = True
+            self.ids['delete_button'].disabled = True
+            self.clear_text()
+
+    def refresh_insert(self):
+        if self.data_table.get_row_checks() != []:
+            self.ids['insert_button'].disabled = True
+        else:
+            self.ids['insert_button'].disabled = False

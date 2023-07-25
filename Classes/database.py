@@ -9,6 +9,7 @@ class Database:
             )    
         self.cursor = self.db.cursor()
         self.create_products_table
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS produkty (ID int PRIMARY KEY AUTO_INCREMENT, opis varchar(50), cena FLOAT, data DATE ,kategoria varchar(50))")
     def create_products_table(self):
         self.cursor.execute("CREATE TABLE IF NOT EXISTS produkty (ID int PRIMARY KEY AUTO_INCREMENT, opis varchar(50), cena FLOAT, data DATE ,kategoria varchar(50))")
         self.db.commit()
@@ -25,7 +26,9 @@ class Database:
         self.cursor.execute("UPDATE produkty SET opis=%s, cena=%s, data=%s, kategoria=%s WHERE id =%s", (description, price, date, category,  id))
         self.db.commit()
 
-    
+    def delete_product(self, id):
+        self.cursor.execute("DELETE FROM produkty WHERE id=%s", (id,))
+        self.db.commit()
 class Users:
     def __init__(self):
         self.db = mysql.connector.connect(
