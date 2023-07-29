@@ -1,5 +1,4 @@
 from kivymd.uix.list import OneLineAvatarIconListItem
-
 class ItemCategoryPopup(OneLineAvatarIconListItem):
     def set_icon(self, instance_check):
         instance_check.active = True

@@ -127,7 +127,7 @@
                                     size_hint: None, None
                                     size: '38dp', '38dp'
                                     pos_hint: {'center_y': 0.5}
-                                    active: True
+                                    
 
                                 MDLabel:
                                     text: 'Produkt'
@@ -139,6 +139,7 @@
                             mode: 'rectangle'
                             size_hint_x: 0.7
                             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            on_text: app.root.current_screen.search()
                     
         MDNavigationDrawer:
             id: nav_drawer

@@ -18,7 +18,9 @@ class LoginScreen(Screen):
 
         self.uzytkownicy.cursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
         user = self.uzytkownicy.cursor.fetchone()
+        #Sprawdzenie, czy użytkownik istnieje
         if user:
+            #Walidacja danych
             self.uzytkownicy.cursor.execute("SELECT Haslo FROM uzytkownicy WHERE email = %s", (email,))
             passwd = self.uzytkownicy.cursor.fetchone()
             if password == passwd[0]:

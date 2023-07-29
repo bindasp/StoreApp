@@ -34,13 +34,16 @@ class RegisterScreen(Screen):
 
         self.uzytkownicy.cursor.execute("SELECT * FROM uzytkownicy WHERE email = %s", (email,))
         user = self.uzytkownicy.cursor.fetchone()
+        #Sprawdzenie, czy użytkownik istnieje
         if user:
             print("Użytkownik o podanym adresie email już istnieje.")
             return False
+        #Dodanie użytkownika do bazy danych
         else:
             self.uzytkownicy.add_user(forename, lastname, email, password, phone_number, address, birth, gender)
             self.manager.current = 'app'
         
+    #Wyświetlanie kalendarza
     def show_date_picker_register(self):
         date_field = self.ids.birth
         date_field.focus = False
@@ -51,13 +54,13 @@ class RegisterScreen(Screen):
 
     def on_cancel(self, instance, value):
         pass
-
+    
     def on_save_date_register(self, instance, value, date_range):
         date_field = self.ids.birth
         date_field.text = str(value)
         self.on_cancel
 
-
+    #Wyświetlenie okna z wyborem płci
     def show_gender_dialog(self):
         if not self.dialog:
             self.dialog = MDDialog(
@@ -65,7 +68,6 @@ class RegisterScreen(Screen):
                 type='confirmation',
                 items = [ItemCategoryPopup(text='Mężczyzna'),
                         ItemCategoryPopup(text='Kobieta'),
-                        ItemCategoryPopup(text='Inne'),
                         ],
                         buttons= [
                             MDFlatButton(
